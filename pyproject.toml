@@ -1,0 +1,17 @@
+[project]
+name = "challenge-tractian"
+version = "0.1.0"
+description = "Add your description here" #TODO escrever uma descri
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "chromadb>=1.3.4",
+    "fastapi>=0.121.2",
+    "langchain>=1.0.7",
+    "openai>=2.8.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.5",
+]
