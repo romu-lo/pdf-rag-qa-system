@@ -1,3 +1,3 @@
 all:
 	uv sync
-	uv run python main.py
+	uv run uvicorn app.main:app --reload
