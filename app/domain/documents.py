@@ -20,6 +20,12 @@ def _can_load(file_path: str) -> bool:
     """
     return re.search(r'\.pdf$', file_path, re.IGNORECASE) is not None
 
+def _extract_file_name(file_path: str) -> str:
+    """
+    Extract the file name without extension from the file path.
+    """
+    return os.path.splitext(os.path.basename(file_path))[0]
+
 def _split_chunks(
     documents:list[Document],
     chunk_size:int=1024,
@@ -55,11 +61,14 @@ def _initialize_vector_db() -> Chroma:
         persist_directory="../../vector_db",
     )
 
-def _insert_into_vector_db(vector_db: Chroma, file_path: str, documents: list[Document]):
+def _insert_into_vector_db(
+    vector_db: Chroma,
+    source_name: str,
+    documents: list[Document],
+) -> dict:
     """
     Generate IDs and insert documents into the vector database.
     """
-    source_name = os.path.splitext(os.path.basename(file_path))[0]
     ids = [f"{source_name}_{i}" for i in range(len(documents))]
 
     try:
@@ -73,14 +82,31 @@ def _insert_into_vector_db(vector_db: Chroma, file_path: str, documents: list[Do
     return {"status": "success", "total_chunks": int(len(documents))}
 
 
-def load_file(file_path: str):
-    if _can_load(file_path):
-        loader = PDFMinerLoader(file_path)
-        documents = loader.load()
-        chunks = _split_chunks(documents)
-        vector_db = _initialize_vector_db()
+def upload_files(file_paths: list[str]) -> dict:
+    vector_db = _initialize_vector_db()
+    insertion_responses = []
 
-        return _insert_into_vector_db(vector_db, file_path, chunks)
+    for file_path in file_paths:
+        source_name = _extract_file_name(file_path)
 
-    else:
-        raise ValueError("Unsupported file format. Please upload a PDF file.")
+        if _can_load(file_path):
+            loader = PDFMinerLoader(file_path)
+            documents = loader.load()
+            chunks = _split_chunks(documents)
+
+            insertion_response = _insert_into_vector_db(vector_db, source_name, chunks)
+            insertion_responses.append(insertion_response)
+
+        else:
+            raise ValueError(
+                f"""Unsupported file format for file: {source_name}.
+                Please upload a PDF file."""
+            )
+
+    return {
+        "message": "Documents processed successfully",
+        "documents_indexed": len(insertion_responses),
+        "total_chunks": sum(
+            resp["total_chunks"] for resp in insertion_responses
+        ),
+    }
