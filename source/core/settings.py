@@ -1,8 +1,9 @@
+from pydantic import Field
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    OPENAI_API_KEY: str
+    openai_api_key: str = Field(env="OPENAI_API_KEY")
 
     search_type: str = "mmr"
     k: int = 5

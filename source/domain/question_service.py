@@ -4,8 +4,8 @@ from langchain.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.prompts import PromptTemplate
 from langchain_core.vectorstores.base import VectorStoreRetriever
 
-from app.core import LLMResponse, constants
-from app.infrastructure import (
+from source.core import LLMResponse, constants
+from source.infrastructure import (
     generate_response,
     initialize_llm,
     initialize_retriever,

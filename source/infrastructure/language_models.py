@@ -1,12 +1,10 @@
 import os
 from typing import Any
 
-from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
-from app.core import LLMResponse, settings
+from source.core import LLMResponse, settings
 
-load_dotenv()
 
 def initialize_embedding_model(
     model: str = settings.embedding_model,
@@ -16,7 +14,7 @@ def initialize_embedding_model(
     """
     return OpenAIEmbeddings(
         model=model,
-        api_key=os.getenv("OPENAI_API_KEY"),
+        api_key=settings.openai_api_key,
     )
 
 def initialize_llm(
@@ -31,7 +29,7 @@ def initialize_llm(
         model=model,
         temperature=temperature,
         max_retries=max_retries,
-        api_key=os.getenv("OPENAI_API_KEY"),
+        api_key=settings.openai_api_key,
     )
 
     return llm.with_structured_output(LLMResponse, strict=True)

@@ -1,21 +1,16 @@
 import os
 import re
 
-from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import (
-    PDFMinerLoader,
     PDFPlumberLoader,
-    PyMuPDFLoader,
 )
 from langchain_core.documents import Document
-from langchain_pymupdf4llm import PyMuPDF4LLMLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from app.core import UploadResponse, constants, settings
-from app.infrastructure import initialize_vector_db, insert_documents
+from source.core import UploadResponse, constants, settings
+from source.infrastructure import initialize_vector_db, insert_documents, delete_all_documents
 
-load_dotenv()
 
 def _is_pdf(file_path: str) -> bool:
     """
@@ -80,7 +75,7 @@ def upload_files(file_paths: list[str]) -> UploadResponse:
     for file_path in file_paths:
 
         if _is_pdf(file_path):
-            loader = PDFMinerLoader(file_path)
+            loader = PDFPlumberLoader(file_path)
             documents = loader.load()
             chunks = _split_chunks(documents)
 
@@ -101,3 +96,15 @@ def upload_files(file_paths: list[str]) -> UploadResponse:
             resp["total_chunks"] for resp in insertion_responses
         ),
     )
+
+def clear_indexed_documents() -> dict[str, str | int]:
+    """
+    Clear all indexed documents from the vector database.
+    """
+    vector_db = initialize_vector_db()
+    delete_all_documents(vector_db)
+
+    return {
+        "status": 200,
+        "message": "All indexed documents have been cleared."
+    }

@@ -4,7 +4,7 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.vectorstores.base import VectorStoreRetriever
 
-from app.core import constants, settings
+from source.core import constants, settings
 
 from .language_models import initialize_embedding_model
 
@@ -63,3 +63,11 @@ def retrieve_documents(
     Retrieve documents from the vector database based on the query.
     """
     return retriever.invoke(query)
+
+def delete_all_documents(
+    vector_db: Chroma,
+) -> None:
+    """
+    Delete all documents from the vector database.
+    """
+    vector_db.reset_collection()
