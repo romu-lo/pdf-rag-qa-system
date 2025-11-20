@@ -4,7 +4,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, File, UploadFile
 
-from app.domain import UploadResponse, answer_question, upload_files
+from app.core import LLMResponse, UploadResponse
+from app.domain import answer_question, upload_files
 
 router = APIRouter()
 
@@ -15,7 +16,10 @@ async def health_check():
 @router.post("/documents")
 async def upload_documents(
     files: Annotated[list[UploadFile], File(...)]
-):
+) -> UploadResponse:
+    """
+    Upload, break in chunks, embed, and index PDF file contents for question answering.
+    """
     temp_paths = []
 
     for uploaded_file in files:
@@ -29,15 +33,9 @@ async def upload_documents(
 
     return result
 
-# TODO def get_temp_path(upload_arquivos) -> str:
-#    temp_dir = tempfile.mkdtemp()
-#
-#    for arquivo in upload_arquivos:
-#        path = os.path.join(temp_dir, arquivo.name)
-#        with open(path, "wb") as f:
-#            f.write(arquivo.getvalue())
-#    return temp_dir
-
 @router.post("/question")
-async def ask_question(question: str):
-    return {"message": "Document uploaded successfully"}
+async def ask_question(question: str) -> LLMResponse:
+    """
+    Ask a question and get an answer based on the indexed documents.
+    """
+    return answer_question(question)

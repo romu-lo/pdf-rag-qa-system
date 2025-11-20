@@ -17,7 +17,6 @@ class Settings(BaseSettings):
     llm_model: str = "gpt-5-nano"
     llm_temperature: float = 0.3
     llm_max_retries: int = 3
-    llm_structured_output: bool = False
 
     class Config:
         env_file = ".env"

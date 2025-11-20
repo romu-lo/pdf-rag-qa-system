@@ -12,10 +12,8 @@ from langchain_core.documents import Document
 from langchain_pymupdf4llm import PyMuPDF4LLMLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from app.core import constants, settings
+from app.core import UploadResponse, constants, settings
 from app.infrastructure import initialize_vector_db, insert_documents
-
-from .models import UploadResponse
 
 load_dotenv()
 

@@ -4,7 +4,7 @@ from langchain.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.prompts import PromptTemplate
 from langchain_core.vectorstores.base import VectorStoreRetriever
 
-from app.core import constants
+from app.core import LLMResponse, constants
 from app.infrastructure import (
     generate_response,
     initialize_llm,
@@ -56,12 +56,12 @@ def _build_message_history(
 def answer_question(
     question: str,
     history: list[SystemMessage | AIMessage | HumanMessage] | None = None,
-) -> str:
+) -> LLMResponse:
     """
     Answer a question based on the provided context using the LLM model.
     """
     retriever = initialize_retriever()
     context = _retrieve_context(question, retriever)
     message_history = _build_message_history(question, context, history)
-    llm = initialize_llm(structured_output=True)
+    llm = initialize_llm()
     return generate_response(message_history, llm)

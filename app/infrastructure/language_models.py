@@ -4,9 +4,7 @@ from typing import Any
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
-from app.core import settings
-
-from .models import LLMResponse
+from app.core import LLMResponse, settings
 
 load_dotenv()
 
@@ -25,7 +23,6 @@ def initialize_llm(
     model: str = settings.llm_model,
     temperature: float = settings.llm_temperature,
     max_retries: int = settings.llm_max_retries,
-    structured_output: bool = settings.llm_structured_output,
 ) -> ChatOpenAI:
     """
     Initialize and return the LLM model.
@@ -37,15 +34,12 @@ def initialize_llm(
         api_key=os.getenv("OPENAI_API_KEY"),
     )
 
-    if structured_output:
-        return llm.with_structured_output(LLMResponse, strict=True)
-
-    return llm
+    return llm.with_structured_output(LLMResponse, strict=True)
 
 def generate_response(
     messages: list[Any],
     llm: ChatOpenAI,
-) -> str:
+) -> LLMResponse:
     """
     Generate a response from the LLM based on the given messages.
     """

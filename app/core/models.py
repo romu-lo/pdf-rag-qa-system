@@ -8,3 +8,8 @@ class LLMResponse(BaseModel):
     references: list[str] = Field(
         description="List of relevant excerpts from the retrieved context, copy and pasted exactly as they appear."
     )
+
+class UploadResponse(BaseModel):
+    message: str
+    documents_indexed: int
+    total_chunks: int
