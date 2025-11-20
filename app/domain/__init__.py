@@ -1,6 +1,9 @@
-from .documents import insert_into_vector_db, load_file
+from .documents import upload_files
+from .question_service import answer_question
+from .models import UploadResponse
 
 __all__ = [
-    "load_file",
-    "insert_into_vector_db",
+    "upload_files",
+    "answer_question",
+    "UploadResponse",
 ]
