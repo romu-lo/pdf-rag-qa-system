@@ -24,7 +24,7 @@ def show_sidebar():
             st.success("All indexed documents have been cleared.")
 
 def app():
-    st.set_page_config(page_title="Chatbot - Challenge Tractian", page_icon='image.png')
+    st.set_page_config(page_title="Chatbot - Challenge Tractian")
     show_sidebar()
 
     if health_check() != 200:
