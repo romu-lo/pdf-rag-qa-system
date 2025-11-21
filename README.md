@@ -44,7 +44,7 @@ The goal was to create a clean, modular, production-ready structure that integra
 
 ## Technologies & Libraries Used
 
-The project was developped on a `WSL` with `Ubuntu 22.04`, and using a `Python 3.12` environment managed by `uv`.
+The project was developed on a `WSL` with `Ubuntu 22.04`, and using a `Python 3.12` environment managed by `uv`.
 
 ### Core Libraries
 
@@ -224,4 +224,4 @@ The application is using MMR retrieval technique, which aims to retrieve not onl
 
 This system does not store conversation history in any way. This means each question is independent from previous ones. Even though the back and front end implementations are ready to support chat history management, I chose not to use it in this challenge because it would increase the complexity of the system.
 
-While testing, I found out that the system developped works better with a single document uploaded. This is a point that can be worked on, maybe by filtering the retrieving results in some way or by implementing and retrieval agent.
+While testing, I found out that the system developed works better with a single document uploaded. This is a point that can be worked on, maybe by filtering the retrieving results in some way or by implementing and retrieval agent.
